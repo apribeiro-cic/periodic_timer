@@ -2,9 +2,9 @@
 #include "pico/stdlib.h"
 #include "hardware/timer.h"
 
-const uint led_pin_red = 11;
-const uint led_pin_yellow = 12;
-const uint led_pin_green = 13;
+const uint led_pin_red = 13;
+const uint led_pin_blue = 12;
+const uint led_pin_green = 11;
 
 static uint8_t current_led = 0; // Variável para controlar qual LED está aceso
 
@@ -13,8 +13,8 @@ void setup_GPIOs() {
     gpio_init(led_pin_red);
     gpio_set_dir(led_pin_red, GPIO_OUT);
 
-    gpio_init(led_pin_yellow);
-    gpio_set_dir(led_pin_yellow, GPIO_OUT);
+    gpio_init(led_pin_blue);
+    gpio_set_dir(led_pin_blue, GPIO_OUT);
 
     gpio_init(led_pin_green);
     gpio_set_dir(led_pin_green, GPIO_OUT);
@@ -23,7 +23,7 @@ void setup_GPIOs() {
 // Função para desligar todos os LEDs, exceto o LED passado como parâmetro
 void turn_off_leds_except(uint led) {
     gpio_put(led_pin_red, 0);
-    gpio_put(led_pin_yellow, 0);
+    gpio_put(led_pin_blue, 0);
     gpio_put(led_pin_green, 0);
     gpio_put(led, 1);
 }
@@ -35,7 +35,8 @@ bool repeating_timer_callback(struct repeating_timer *timer) {
             turn_off_leds_except(led_pin_red);
             break;
         case 2:
-            turn_off_leds_except(led_pin_yellow);
+            turn_off_leds_except(led_pin_red);
+            gpio_put(led_pin_green, 1);
             break;
         case 3:
             turn_off_leds_except(led_pin_green);
